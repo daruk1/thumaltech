@@ -64,6 +64,8 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               "wQN2D_jEyDk",
+              "c6UMRpGOyGU",
+              "72TkPN3Zd8o",
             ].map((id) => (
               <div key={id} className="rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow">
                 <div className="aspect-video">
