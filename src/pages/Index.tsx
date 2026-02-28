@@ -5,15 +5,20 @@ import product1 from "@/assets/product-1.png";
 import product2 from "@/assets/product-2.png";
 import product3 from "@/assets/product-3.png";
 import product4 from "@/assets/product-4.png";
+import product5 from "@/assets/product-5.png";
+import product6 from "@/assets/product-6.png";
 
 const YOUTUBE_URL = "https://youtube.com/@thumaltech?si=h7wPDlZXb5lVXjz4";
 const WHATSAPP_URL = "https://whatsapp.com/channel/0029Va55eIE8kyyFFFTx9a3Q";
+const STORE_URL = "https://wa.me/thumaltech";
 
 const PRODUCTS = [
-  { name: "HD Aerial Drone", price: "LKR 4,500", image: product1, url: "https://wa.me/p/25727513903606477/21591454912740" },
-  { name: "Brushless Motor Drone", price: "LKR 6,800", image: product2, url: "https://wa.me/p/25772645522367770/21591454912740" },
-  { name: "E99 Pro 4K Drone", price: "LKR 3,200", image: product3, url: "https://wa.me/p/25436969965973648/21591454912740" },
-  { name: "Mini Dual Camera Drone", price: "LKR 2,900", image: product4, url: "https://wa.me/p/33175652652050086/21591454912740" },
+  { name: "HD Aerial Drone", price: "LKR 15,600.00", image: product1, url: "https://wa.me/p/25727513903606477/21591454912740" },
+  { name: "Brushless Motor Drone", price: "LKR 13,599.00", image: product2, url: "https://wa.me/p/25772645522367770/21591454912740" },
+  { name: "E99 Pro 4K Drone", price: "LKR 8,500.00", image: product3, url: "https://wa.me/p/25436969965973648/21591454912740" },
+  { name: "Mini Dual Camera Drone", price: "LKR 10,500.00", image: product4, url: "https://wa.me/p/33175652652050086/21591454912740" },
+  { name: "Gaming Earphone", price: "LKR 1,400.00", image: product5, url: "https://wa.me/p/25783168871334919/21591454912740" },
+  { name: "Wireless Keyboard & Mouse", price: "LKR 2,400.00", image: product6, url: "https://wa.me/p/25720150101012353/21591454912740" },
 ];
 
 const Index = () => {
@@ -142,7 +147,7 @@ const Index = () => {
           <p className="text-muted-foreground text-center mb-12 max-w-lg mx-auto">
             Buy tested & reviewed products directly from us via WhatsApp
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PRODUCTS.map((product) => (
               <a
                 key={product.name}
@@ -168,6 +173,17 @@ const Index = () => {
                 </div>
               </a>
             ))}
+          </div>
+          <div className="text-center mt-8">
+            <a
+              href={STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary/50 text-primary hover:bg-primary/10 font-semibold transition-all"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              Visit Thumal Tech Store
+            </a>
           </div>
         </div>
       </section>
