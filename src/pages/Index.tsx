@@ -1,9 +1,20 @@
-import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu } from "lucide-react";
+import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag } from "lucide-react";
 import heroImg from "@/assets/thumal-tech-logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
+import product1 from "@/assets/product-1.png";
+import product2 from "@/assets/product-2.png";
+import product3 from "@/assets/product-3.png";
+import product4 from "@/assets/product-4.png";
 
 const YOUTUBE_URL = "https://youtube.com/@thumaltech?si=h7wPDlZXb5lVXjz4";
 const WHATSAPP_URL = "https://whatsapp.com/channel/0029Va55eIE8kyyFFFTx9a3Q";
+
+const PRODUCTS = [
+  { name: "HD Aerial Drone", image: product1, url: "https://wa.me/p/25727513903606477/21591454912740" },
+  { name: "Brushless Motor Drone", image: product2, url: "https://wa.me/p/25772645522367770/21591454912740" },
+  { name: "E99 Pro 4K Drone", image: product3, url: "https://wa.me/p/25436969965973648/21591454912740" },
+  { name: "Mini Dual Camera Drone", image: product4, url: "https://wa.me/p/33175652652050086/21591454912740" },
+];
 
 const Index = () => {
   return (
@@ -117,6 +128,44 @@ const Index = () => {
                 <h3 className="font-display text-lg font-semibold text-foreground mb-2">{item.title}</h3>
                 <p className="text-muted-foreground text-sm">{item.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Products Store */}
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-center mb-4 text-foreground">
+            Thumal Tech <span className="text-primary">Store</span>
+          </h2>
+          <p className="text-muted-foreground text-center mb-12 max-w-lg mx-auto">
+            Buy tested & reviewed products directly from us via WhatsApp
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PRODUCTS.map((product) => (
+              <a
+                key={product.name}
+                href={product.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow bg-card"
+              >
+                <div className="aspect-square overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-display text-sm font-semibold text-foreground mb-3">{product.name}</h3>
+                  <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
+                    <ShoppingBag className="w-4 h-4" />
+                    Buy on WhatsApp
+                  </span>
+                </div>
+              </a>
             ))}
           </div>
         </div>
