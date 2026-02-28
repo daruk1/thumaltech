@@ -1,4 +1,4 @@
-import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag } from "lucide-react";
+import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag, Phone } from "lucide-react";
 import heroImg from "@/assets/thumal-tech-logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import product1 from "@/assets/product-1.png";
@@ -144,8 +144,12 @@ const Index = () => {
           <h2 className="font-display text-2xl md:text-3xl font-bold text-center mb-4 text-foreground">
             Thumal Tech <span className="text-primary">Store</span>
           </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-lg mx-auto">
+          <p className="text-muted-foreground text-center mb-2 max-w-lg mx-auto">
             Buy tested & reviewed products directly from us via WhatsApp
+          </p>
+          <p className="text-muted-foreground text-center mb-12 flex items-center justify-center gap-2">
+            <Phone className="w-4 h-4 text-primary" />
+            <a href="tel:+94782099026" className="text-primary hover:underline font-semibold">+94 782099026</a>
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PRODUCTS.map((product) => (
