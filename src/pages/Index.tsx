@@ -55,6 +55,43 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Latest Videos */}
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-center mb-12 text-foreground">
+            Latest <span className="text-primary">Videos</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              "wQN2D_jEyDk",
+            ].map((id) => (
+              <div key={id} className="rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow">
+                <div className="aspect-video">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${id}`}
+                    title="YouTube video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <a
+              href={YOUTUBE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary/50 text-primary hover:bg-primary/10 font-semibold transition-all"
+            >
+              <Youtube className="w-5 h-5" />
+              View All Videos
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Content Categories */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
