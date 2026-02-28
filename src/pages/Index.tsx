@@ -10,10 +10,10 @@ const YOUTUBE_URL = "https://youtube.com/@thumaltech?si=h7wPDlZXb5lVXjz4";
 const WHATSAPP_URL = "https://whatsapp.com/channel/0029Va55eIE8kyyFFFTx9a3Q";
 
 const PRODUCTS = [
-  { name: "HD Aerial Drone", image: product1, url: "https://wa.me/p/25727513903606477/21591454912740" },
-  { name: "Brushless Motor Drone", image: product2, url: "https://wa.me/p/25772645522367770/21591454912740" },
-  { name: "E99 Pro 4K Drone", image: product3, url: "https://wa.me/p/25436969965973648/21591454912740" },
-  { name: "Mini Dual Camera Drone", image: product4, url: "https://wa.me/p/33175652652050086/21591454912740" },
+  { name: "HD Aerial Drone", price: "ETB 4,500", image: product1, url: "https://wa.me/p/25727513903606477/21591454912740" },
+  { name: "Brushless Motor Drone", price: "ETB 6,800", image: product2, url: "https://wa.me/p/25772645522367770/21591454912740" },
+  { name: "E99 Pro 4K Drone", price: "ETB 3,200", image: product3, url: "https://wa.me/p/25436969965973648/21591454912740" },
+  { name: "Mini Dual Camera Drone", price: "ETB 2,900", image: product4, url: "https://wa.me/p/33175652652050086/21591454912740" },
 ];
 
 const Index = () => {
@@ -159,8 +159,9 @@ const Index = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-display text-sm font-semibold text-foreground mb-3">{product.name}</h3>
-                  <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary">
+                  <h3 className="font-display text-sm font-semibold text-foreground mb-1">{product.name}</h3>
+                  <p className="text-primary font-bold text-lg mb-3">{product.price}</p>
+                  <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary/80 group-hover:text-primary transition-colors">
                     <ShoppingBag className="w-4 h-4" />
                     Buy on WhatsApp
                   </span>
