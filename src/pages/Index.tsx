@@ -204,7 +204,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8 px-4">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-display text-sm text-muted-foreground">© 2025 Thumal Tech. All rights reserved.</p>
+          <p className="font-display text-sm text-muted-foreground">© 2026 Thumal Tech. All rights reserved. Made by Daruka</p>
           <div className="flex gap-4">
             <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
               <Youtube className="w-5 h-5" />
