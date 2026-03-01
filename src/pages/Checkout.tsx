@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, Send } from "lucide-react";
+import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Checkout = () => {
   const { items, removeFromCart, updateQuantity, clearCart, totalPrice } = useCart();
@@ -16,8 +17,9 @@ const Checkout = () => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!name.trim() || !address.trim() || !phone.trim() || !email.trim()) {
       toast({ title: "Please fill all fields", variant: "destructive" });
       return;
@@ -27,28 +29,37 @@ const Checkout = () => {
       return;
     }
 
-    const orderLines = items
-      .map(
-        (item) =>
-          `Item #${item.itemNumber} - ${item.name} x${item.quantity} = LKR ${(item.priceNum * item.quantity).toLocaleString("en-LK", { minimumFractionDigits: 2 })}`
-      )
-      .join("%0A");
-
+    setLoading(true);
     const totalFormatted = `LKR ${totalPrice.toLocaleString("en-LK", { minimumFractionDigits: 2 })}`;
 
-    const subject = encodeURIComponent("New Order - Thumal Tech Store");
-    const body = encodeURIComponent(
-      `New Order Details\n\nCustomer Name: ${name.trim()}\nAddress: ${address.trim()}\nPhone: ${phone.trim()}\nEmail: ${email.trim()}\n\nOrder Items:\n${items.map((item) => `Item #${item.itemNumber} - ${item.name} x${item.quantity} = LKR ${(item.priceNum * item.quantity).toLocaleString("en-LK", { minimumFractionDigits: 2 })}`).join("\n")}\n\nTotal: ${totalFormatted}`
-    );
+    try {
+      const { data, error } = await supabase.functions.invoke("send-order", {
+        body: {
+          name: name.trim(),
+          address: address.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
+          items: items.map((item) => ({
+            itemNumber: item.itemNumber,
+            name: item.name,
+            quantity: item.quantity,
+            price: `LKR ${(item.priceNum * item.quantity).toLocaleString("en-LK", { minimumFractionDigits: 2 })}`,
+          })),
+          total: totalFormatted,
+        },
+      });
 
-    window.open(
-      `mailto:darukanethmallife@gmail.com?subject=${subject}&body=${body}`,
-      "_blank"
-    );
+      if (error) throw error;
 
-    toast({ title: "Order submitted!", description: "Your email client will open with the order details." });
-    clearCart();
-    navigate("/");
+      toast({ title: "Order submitted!", description: "Your order has been sent to Thumal Tech." });
+      clearCart();
+      navigate("/");
+    } catch (err) {
+      console.error("Order error:", err);
+      toast({ title: "Failed to submit order", description: "Please try again or contact us directly.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (items.length === 0) {
@@ -156,8 +167,9 @@ const Checkout = () => {
               LKR {totalPrice.toLocaleString("en-LK", { minimumFractionDigits: 2 })}
             </span>
           </div>
-          <Button onClick={handleCheckout} className="w-full gap-2 text-lg py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-            <Send className="w-5 h-5" /> Checkout & Send Order
+          <Button onClick={handleCheckout} disabled={loading} className="w-full gap-2 text-lg py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            {loading ? "Sending..." : "Checkout & Send Order"}
           </Button>
           <p className="text-xs text-muted-foreground text-center mt-3">
             Order will be sent to Thumal Tech via email
