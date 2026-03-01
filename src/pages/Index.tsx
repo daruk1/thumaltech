@@ -1,4 +1,7 @@
-import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag, Phone } from "lucide-react";
+import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag, Phone, ShoppingCart, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 import heroImg from "@/assets/thumal-tech-logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
 import product1 from "@/assets/product-1.png";
@@ -13,17 +16,39 @@ const WHATSAPP_URL = "https://whatsapp.com/channel/0029Va55eIE8kyyFFFTx9a3Q";
 const STORE_URL = "https://wa.me/thumaltech";
 
 const PRODUCTS = [
-  { name: "HD Aerial Drone", price: "LKR 15,600.00", image: product1, url: "https://wa.me/p/25727513903606477/21591454912740" },
-  { name: "Brushless Motor Drone", price: "LKR 13,599.00", image: product2, url: "https://wa.me/p/25772645522367770/21591454912740" },
-  { name: "E99 Pro 4K Drone", price: "LKR 8,500.00", image: product3, url: "https://wa.me/p/25436969965973648/21591454912740" },
-  { name: "Mini Dual Camera Drone", price: "LKR 10,500.00", image: product4, url: "https://wa.me/p/33175652652050086/21591454912740" },
-  { name: "Gaming Earphone", price: "LKR 1,400.00", image: product5, url: "https://wa.me/p/25783168871334919/21591454912740" },
-  { name: "Wireless Keyboard & Mouse", price: "LKR 2,400.00", image: product6, url: "https://wa.me/p/25720150101012353/21591454912740" },
+  { itemNumber: 1, name: "HD Aerial Drone", price: "LKR 15,600.00", priceNum: 15600, image: product1 },
+  { itemNumber: 2, name: "Brushless Motor Drone", price: "LKR 13,599.00", priceNum: 13599, image: product2 },
+  { itemNumber: 3, name: "E99 Pro 4K Drone", price: "LKR 8,500.00", priceNum: 8500, image: product3 },
+  { itemNumber: 4, name: "Mini Dual Camera Drone", price: "LKR 10,500.00", priceNum: 10500, image: product4 },
+  { itemNumber: 5, name: "Gaming Earphone", price: "LKR 1,400.00", priceNum: 1400, image: product5 },
+  { itemNumber: 6, name: "Wireless Keyboard & Mouse", price: "LKR 2,400.00", priceNum: 2400, image: product6 },
 ];
 
 const Index = () => {
+  const { addToCart, totalItems } = useCart();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleAddToCart = (product: typeof PRODUCTS[0]) => {
+    addToCart(product);
+    toast({ title: `${product.name} added to cart!` });
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Floating Cart Button */}
+      <button
+        onClick={() => navigate("/checkout")}
+        className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:scale-105 transition-transform"
+      >
+        <ShoppingCart className="w-5 h-5" />
+        {totalItems > 0 && (
+          <span className="bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            {totalItems}
+          </span>
+        )}
+      </button>
+
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div
@@ -78,11 +103,7 @@ const Index = () => {
             Latest <span className="text-primary">Videos</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              "wQN2D_jEyDk",
-              "c6UMRpGOyGU",
-              "72TkPN3Zd8o",
-            ].map((id) => (
+            {["wQN2D_jEyDk", "c6UMRpGOyGU", "72TkPN3Zd8o"].map((id) => (
               <div key={id} className="rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow">
                 <div className="aspect-video">
                   <iframe
@@ -97,14 +118,8 @@ const Index = () => {
             ))}
           </div>
           <div className="text-center mt-8">
-            <a
-              href={YOUTUBE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary/50 text-primary hover:bg-primary/10 font-semibold transition-all"
-            >
-              <Youtube className="w-5 h-5" />
-              View All Videos
+            <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary/50 text-primary hover:bg-primary/10 font-semibold transition-all">
+              <Youtube className="w-5 h-5" /> View All Videos
             </a>
           </div>
         </div>
@@ -125,10 +140,7 @@ const Index = () => {
               { icon: Youtube, title: "YouTube Shorts", desc: "Quick tech tips and tricks" },
               { icon: MessageCircle, title: "Community", desc: "Join the Thumal Tech family" },
             ].map((item) => (
-              <div
-                key={item.title}
-                className="group p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow"
-              >
+              <div key={item.title} className="group p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow">
                 <item.icon className="w-10 h-10 text-primary mb-4 group-hover:animate-pulse-glow" />
                 <h3 className="font-display text-lg font-semibold text-foreground mb-2">{item.title}</h3>
                 <p className="text-muted-foreground text-sm">{item.desc}</p>
@@ -145,7 +157,7 @@ const Index = () => {
             Thumal Tech <span className="text-primary">Store</span>
           </h2>
           <p className="text-muted-foreground text-center mb-2 max-w-lg mx-auto">
-            Buy tested & reviewed products directly from us via WhatsApp
+            Buy tested & reviewed products directly from us
           </p>
           <p className="text-muted-foreground text-center mb-12 flex items-center justify-center gap-2">
             <Phone className="w-4 h-4 text-primary" />
@@ -153,40 +165,36 @@ const Index = () => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PRODUCTS.map((product) => (
-              <a
-                key={product.name}
-                href={product.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
+                key={product.itemNumber}
                 className="group rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:box-glow bg-card"
               >
-                <div className="aspect-square overflow-hidden">
+                <div className="aspect-square overflow-hidden relative">
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
+                  <span className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-md font-display">
+                    #{product.itemNumber}
+                  </span>
                 </div>
                 <div className="p-4">
                   <h3 className="font-display text-sm font-semibold text-foreground mb-1">{product.name}</h3>
                   <p className="text-primary font-bold text-lg mb-3">{product.price}</p>
-                  <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary/80 group-hover:text-primary transition-colors">
-                    <ShoppingBag className="w-4 h-4" />
-                    Buy on WhatsApp
-                  </span>
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-lg bg-primary/10 border border-primary/30 text-primary font-semibold text-sm hover:bg-primary hover:text-primary-foreground transition-all"
+                  >
+                    <Plus className="w-4 h-4" /> Add to Cart
+                  </button>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
           <div className="text-center mt-8">
-            <a
-              href={STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary/50 text-primary hover:bg-primary/10 font-semibold transition-all"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              Visit Thumal Tech Store
+            <a href={STORE_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-primary/50 text-primary hover:bg-primary/10 font-semibold transition-all">
+              <ShoppingBag className="w-5 h-5" /> Visit Thumal Tech Store
             </a>
           </div>
         </div>
@@ -195,9 +203,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8 px-4">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-display text-sm text-muted-foreground">
-            © 2025 Thumal Tech. All rights reserved.
-          </p>
+          <p className="font-display text-sm text-muted-foreground">© 2025 Thumal Tech. All rights reserved.</p>
           <div className="flex gap-4">
             <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
               <Youtube className="w-5 h-5" />
