@@ -1,4 +1,5 @@
 import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag, Phone, ShoppingCart, Plus } from "lucide-react";
+import ChatBot from "@/components/ChatBot";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
@@ -214,6 +215,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      <ChatBot />
     </div>
   );
 };
