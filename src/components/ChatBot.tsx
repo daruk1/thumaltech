@@ -133,14 +133,9 @@ const ChatBot = () => {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
         {messages.length === 0 && (
-          <div className="text-center mt-8 space-y-2">
-            <p className="text-muted-foreground text-sm">
-              👋 Hi! Ask me anything about our products.
-            </p>
-            <p className="text-muted-foreground/60 text-xs">
-              Daruk AI may make mistakes, so double-check it.
-            </p>
-          </div>
+          <p className="text-muted-foreground text-sm text-center mt-8">
+            👋 Hi! Ask me anything about our products.
+          </p>
         )}
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -172,25 +167,30 @@ const ChatBot = () => {
       </div>
 
       {/* Input */}
-      <form
-        onSubmit={(e) => { e.preventDefault(); send(); }}
-        className="flex items-center gap-2 px-3 py-3 border-t border-border"
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 bg-background border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-          disabled={loading}
-        />
-        <button
-          type="submit"
-          disabled={loading || !input.trim()}
-          className="w-9 h-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center disabled:opacity-50"
+      <div className="border-t border-border">
+        <form
+          onSubmit={(e) => { e.preventDefault(); send(); }}
+          className="flex items-center gap-2 px-3 pt-3 pb-1"
         >
-          <Send className="w-4 h-4" />
-        </button>
-      </form>
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type a message..."
+            className="flex-1 bg-background border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            disabled={loading || !input.trim()}
+            className="w-9 h-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center disabled:opacity-50"
+          >
+            <Send className="w-4 h-4" />
+          </button>
+        </form>
+        <p className="text-muted-foreground/60 text-[10px] text-center pb-2">
+          Daruk AI may make mistakes, so double-check it.
+        </p>
+      </div>
     </div>
   );
 };
