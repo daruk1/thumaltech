@@ -123,7 +123,7 @@ const ChatBot = () => {
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-primary/5">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-primary" />
-          <span className="font-display font-semibold text-foreground text-sm">Thumal Tech AI</span>
+          <span className="font-display font-semibold text-foreground text-sm">Daruk AI</span>
         </div>
         <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
           <X className="w-5 h-5" />
@@ -133,9 +133,14 @@ const ChatBot = () => {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
         {messages.length === 0 && (
-          <p className="text-muted-foreground text-sm text-center mt-8">
-            👋 Hi! Ask me anything about our products.
-          </p>
+          <div className="text-center mt-8 space-y-2">
+            <p className="text-muted-foreground text-sm">
+              👋 Hi! Ask me anything about our products.
+            </p>
+            <p className="text-muted-foreground/60 text-xs">
+              Daruk AI may make mistakes, so double-check it.
+            </p>
+          </div>
         )}
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
