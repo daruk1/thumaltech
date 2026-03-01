@@ -1,12 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, Send, Loader2 } from "lucide-react";
+import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, Send, Loader2, CheckCircle, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+const SHIPPING_COST = 400;
+
+const OrderConfirmation = ({ email }: { email: string }) => {
+  const navigate = useNavigate();
+  const [seconds, setSeconds] = useState(24 * 60 * 60); // 24 hours
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-6 px-4 text-center">
+      <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center">
+        <CheckCircle className="w-10 h-10 text-green-500" />
+      </div>
+      <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+        Order Placed Successfully!
+      </h1>
+      <p className="text-muted-foreground max-w-md">
+        We will reply within <span className="text-primary font-semibold">24 hours</span>
+      </p>
+
+      {/* Timer */}
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <Clock className="w-5 h-5 text-primary" />
+        <div className="flex gap-1 font-mono text-lg font-bold text-foreground">
+          <span className="bg-card border border-border rounded-lg px-3 py-2">{String(hours).padStart(2, "0")}</span>
+          <span className="flex items-center text-primary">:</span>
+          <span className="bg-card border border-border rounded-lg px-3 py-2">{String(mins).padStart(2, "0")}</span>
+          <span className="flex items-center text-primary">:</span>
+          <span className="bg-card border border-border rounded-lg px-3 py-2">{String(secs).padStart(2, "0")}</span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 mt-2 text-muted-foreground">
+        <Mail className="w-5 h-5 text-primary" />
+        <p className="text-sm">
+          Check your email: <span className="text-foreground font-semibold">{email}</span>
+        </p>
+      </div>
+
+      <Button onClick={() => navigate("/")} variant="outline" className="gap-2 mt-4">
+        <ArrowLeft className="w-4 h-4" /> Back to Store
+      </Button>
+    </div>
+  );
+};
 
 const Checkout = () => {
   const { items, removeFromCart, updateQuantity, clearCart, totalPrice } = useCart();
@@ -18,6 +73,10 @@ const Checkout = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderEmail, setOrderEmail] = useState("");
+
+  const grandTotal = totalPrice + SHIPPING_COST;
 
   const handleCheckout = async () => {
     if (!name.trim() || !address.trim() || !phone.trim() || !email.trim()) {
@@ -30,7 +89,7 @@ const Checkout = () => {
     }
 
     setLoading(true);
-    const totalFormatted = `LKR ${totalPrice.toLocaleString("en-LK", { minimumFractionDigits: 2 })}`;
+    const totalFormatted = `LKR ${grandTotal.toLocaleString("en-LK", { minimumFractionDigits: 2 })}`;
 
     try {
       const { data, error } = await supabase.functions.invoke("send-order", {
@@ -45,15 +104,17 @@ const Checkout = () => {
             quantity: item.quantity,
             price: `LKR ${(item.priceNum * item.quantity).toLocaleString("en-LK", { minimumFractionDigits: 2 })}`,
           })),
+          subtotal: `LKR ${totalPrice.toLocaleString("en-LK", { minimumFractionDigits: 2 })}`,
+          shipping: `LKR ${SHIPPING_COST.toLocaleString("en-LK", { minimumFractionDigits: 2 })}`,
           total: totalFormatted,
         },
       });
 
       if (error) throw error;
 
-      toast({ title: "Order submitted!", description: "Your order has been sent to Thumal Tech." });
+      setOrderEmail(email.trim());
+      setOrderPlaced(true);
       clearCart();
-      navigate("/");
     } catch (err) {
       console.error("Order error:", err);
       toast({ title: "Failed to submit order", description: "Please try again or contact us directly.", variant: "destructive" });
@@ -61,6 +122,10 @@ const Checkout = () => {
       setLoading(false);
     }
   };
+
+  if (orderPlaced) {
+    return <OrderConfirmation email={orderEmail} />;
+  }
 
   if (items.length === 0) {
     return (
@@ -161,11 +226,25 @@ const Checkout = () => {
 
         {/* Total & Checkout */}
         <div className="rounded-xl bg-card border border-primary/30 p-6 box-glow">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-muted-foreground font-semibold">Total</span>
-            <span className="font-display text-2xl font-bold text-primary">
-              LKR {totalPrice.toLocaleString("en-LK", { minimumFractionDigits: 2 })}
-            </span>
+          <div className="space-y-2 mb-4">
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground text-sm">Subtotal</span>
+              <span className="text-foreground font-semibold">
+                LKR {totalPrice.toLocaleString("en-LK", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground text-sm">Shipping</span>
+              <span className="text-foreground font-semibold">
+                LKR {SHIPPING_COST.toLocaleString("en-LK", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            <div className="border-t border-border pt-2 flex justify-between items-center">
+              <span className="text-foreground font-semibold">Total</span>
+              <span className="font-display text-2xl font-bold text-primary">
+                LKR {grandTotal.toLocaleString("en-LK", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
           </div>
           <Button onClick={handleCheckout} disabled={loading} className="w-full gap-2 text-lg py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
