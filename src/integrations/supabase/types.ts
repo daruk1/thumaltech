@@ -14,7 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          item_number: number
+          name: string
+          order_id: string
+          price_num: number
+          quantity: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_number: number
+          name: string
+          order_id: string
+          price_num: number
+          quantity?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_number?: number
+          name?: string
+          order_id?: string
+          price_num?: number
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          address: string
+          created_at: string
+          customer_name: string
+          email: string
+          id: string
+          phone: string
+          shipping: number
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          customer_name: string
+          email: string
+          id?: string
+          phone: string
+          shipping?: number
+          status?: string
+          subtotal: number
+          total: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          customer_name?: string
+          email?: string
+          id?: string
+          phone?: string
+          shipping?: number
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

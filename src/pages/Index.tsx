@@ -1,7 +1,8 @@
-import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag, Phone, ShoppingCart, Plus } from "lucide-react";
+import { Youtube, MessageCircle, Smartphone, Monitor, Camera, Cpu, ShoppingBag, Phone, ShoppingCart, Plus, User, Package, LogOut } from "lucide-react";
 import ChatBot from "@/components/ChatBot";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import heroImg from "@/assets/thumal-tech-logo.png";
 import heroBg from "@/assets/hero-bg.jpg";
@@ -27,6 +28,7 @@ const PRODUCTS = [
 
 const Index = () => {
   const { addToCart, totalItems } = useCart();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -37,18 +39,43 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Floating Cart Button */}
-      <button
-        onClick={() => navigate("/checkout")}
-        className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:scale-105 transition-transform"
-      >
-        <ShoppingCart className="w-5 h-5" />
-        {totalItems > 0 && (
-          <span className="bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-            {totalItems}
-          </span>
+      {/* Floating Nav Buttons */}
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
+        {user ? (
+          <>
+            <button
+              onClick={() => navigate("/my-orders")}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-card border border-border text-foreground text-sm font-semibold hover:border-primary/50 transition-all"
+            >
+              <Package className="w-4 h-4" /> Orders
+            </button>
+            <button
+              onClick={async () => { await signOut(); toast({ title: "Signed out" }); }}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-card border border-border text-muted-foreground text-sm hover:border-destructive/50 hover:text-destructive transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => navigate("/auth")}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-card border border-border text-foreground text-sm font-semibold hover:border-primary/50 transition-all"
+          >
+            <User className="w-4 h-4" /> Sign In
+          </button>
         )}
-      </button>
+        <button
+          onClick={() => navigate("/checkout")}
+          className="flex items-center gap-2 px-4 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:scale-105 transition-transform"
+        >
+          <ShoppingCart className="w-5 h-5" />
+          {totalItems > 0 && (
+            <span className="bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              {totalItems}
+            </span>
+          )}
+        </button>
+      </div>
 
       {/* Hero */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
