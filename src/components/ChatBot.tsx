@@ -60,7 +60,7 @@ async function streamChat({
 }
 
 const ChatBot = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
