@@ -12,22 +12,22 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
-    const OPENROUTER_API_KEY = Deno.env.get("OPENROUTER_API_KEY");
-    if (!OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is not configured");
+    const DEEPSEEK_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
+    if (!DEEPSEEK_API_KEY) throw new Error("DEEPSEEK_API_KEY is not configured");
 
     const systemPrompt =
       "You are Thumal Tech's AI assistant. Help customers with product questions about drones, gaming earphones, keyboards, and other tech gadgets sold at Thumal Tech Store. Be friendly, concise, and helpful. Answer in the same language the user writes in.";
 
     const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
+      "https://api.deepseek.com/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
+          model: "deepseek-chat",
           messages: [
             { role: "system", content: systemPrompt },
             ...messages,
