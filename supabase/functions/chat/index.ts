@@ -12,26 +12,30 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
-    const QWEN_API_KEY = Deno.env.get("QWEN_API_KEY");
-    if (!QWEN_API_KEY) throw new Error("QWEN_API_KEY is not configured");
+    const NVIDIA_API_KEY = Deno.env.get("NVIDIA_API_KEY");
+    if (!NVIDIA_API_KEY) throw new Error("NVIDIA_API_KEY is not configured");
 
     const systemPrompt =
       "You are Thumal Tech's AI assistant. Help customers with product questions about drones, gaming earphones, keyboards, and other tech gadgets sold at Thumal Tech Store. Be friendly, concise, and helpful. Answer in the same language the user writes in.";
 
     const response = await fetch(
-      "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "https://integrate.api.nvidia.com/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${QWEN_API_KEY}`,
+          Authorization: `Bearer ${NVIDIA_API_KEY}`,
           "Content-Type": "application/json",
+          Accept: "text/event-stream",
         },
         body: JSON.stringify({
-          model: "qwen-plus",
+          model: "qwen/qwen3.5-397b-a17b",
           messages: [
             { role: "system", content: systemPrompt },
             ...messages,
           ],
+          max_tokens: 4096,
+          temperature: 0.6,
+          top_p: 0.95,
           stream: true,
         }),
       }
