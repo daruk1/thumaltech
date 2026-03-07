@@ -12,30 +12,27 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
-    const NVIDIA_API_KEY = Deno.env.get("NVIDIABuild-Autogen-13");
-    if (!NVIDIA_API_KEY) throw new Error("NVIDIABuild-Autogen-13 is not configured");
+    const DEEPSEEK_API_KEY = Deno.env.get("DEEPSEEK_API_KEY");
+    if (!DEEPSEEK_API_KEY) throw new Error("DEEPSEEK_API_KEY is not configured");
 
     const systemPrompt =
       "You are Thumal Tech's AI assistant. Help customers with product questions about drones, gaming earphones, keyboards, and other tech gadgets sold at Thumal Tech Store. Be friendly, concise, and helpful. Answer in the same language the user writes in.";
 
     const response = await fetch(
-      "https://integrate.api.nvidia.com/v1/chat/completions",
+      "https://api.deepseek.com/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${NVIDIA_API_KEY}`,
+          Authorization: `Bearer ${DEEPSEEK_API_KEY}`,
           "Content-Type": "application/json",
-          Accept: "text/event-stream",
         },
         body: JSON.stringify({
-          model: "qwen/qwen3.5-397b-a17b",
+          model: "deepseek-reasoner",
           messages: [
             { role: "system", content: systemPrompt },
             ...messages,
           ],
           max_tokens: 4096,
-          temperature: 0.6,
-          top_p: 0.95,
           stream: true,
         }),
       }
