@@ -12,8 +12,8 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
-    const NVIDIA_API_KEY = Deno.env.get("NVIDIA_API_KEY");
-    if (!NVIDIA_API_KEY) throw new Error("NVIDIA_API_KEY is not configured");
+    const NVIDIA_API_KEY = Deno.env.get("NVIDIABuild-Autogen-13");
+    if (!NVIDIA_API_KEY) throw new Error("NVIDIABuild-Autogen-13 is not configured");
 
     const systemPrompt =
       "You are Thumal Tech's AI assistant. Help customers with product questions about drones, gaming earphones, keyboards, and other tech gadgets sold at Thumal Tech Store. Be friendly, concise, and helpful. Answer in the same language the user writes in.";
